@@ -6,6 +6,7 @@
 # Import external libraries
 import numpy as np                          # to perform matrix operations
 import time
+import L1_motor as motor
 
 # define robot geometry
 R = 0.041                           # wheel radius
@@ -59,4 +60,9 @@ if __name__ == "__main__":
         B = np.array([x_dot, theta_dot])                    # make user inputs into an array
         phis = getPdTargets(B)                                   # convert [xd, td] to [pdl, pdr]
         print("pdl",phis[0],"\tpdr",phis[1])                # print pdl & pdr
+
+        # Move as directed
+        motor.sendLeft(phis[0])
+        motor.sendRight(phis[1])
+
         time.sleep(1)

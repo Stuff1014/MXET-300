@@ -8,6 +8,8 @@ import L2_speed_control as sc
 import numpy as np
 from time import sleep
 import math
+import L1_log as log
+import L1_ina as bat
 
 # define some variables that can be used to create the path
 # make use of these definitions in the motions list
@@ -41,4 +43,11 @@ for  count, motion in enumerate(motions):
     print("Motion: ", count+1, "\t Chassis Forward Velocity (m/s): {:.2f} \t Chassis Angular Velocity (rad/s): {:.2f} \t Duration (sec): {:.2f}".format(motion[0], motion[1], motion[2]))
     wheel_speeds = ik.getPdTargets(motion[:2])                  # take the forward speed(m/s) and turning speed(rad/s) and use inverse kinematics to deterimine wheel speeds
     sc.driveOpenLoop(wheel_speeds)                              # take the calculated wheel speeds and use them to run the motors
+
+    log.tmpFile(motion[0], "x_dot")        # Exports x_dot to Node-RED
+    log.tmpFile(motion[1], "theta_dot")    # Exports theta_dot to Node-RED
+
+    current_voltage = bat.readVolts()
+    log.tmpFile(current_voltage, "voltage")
+
     sleep(motion[2])                                            # wait the motion duration
