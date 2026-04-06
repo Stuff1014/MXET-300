@@ -38,16 +38,19 @@ motions = [
     [0.2, -0.0725, 5.0],                # Motion 7 - Forward 1m
 ]
 
-# iterate through and perform each open loop motion and then wait the specified duration.
-for  count, motion in enumerate(motions):
-    print("Motion: ", count+1, "\t Chassis Forward Velocity (m/s): {:.2f} \t Chassis Angular Velocity (rad/s): {:.2f} \t Duration (sec): {:.2f}".format(motion[0], motion[1], motion[2]))
-    wheel_speeds = ik.getPdTargets(motion[:2])                  # take the forward speed(m/s) and turning speed(rad/s) and use inverse kinematics to deterimine wheel speeds
-    sc.driveOpenLoop(wheel_speeds)                              # take the calculated wheel speeds and use them to run the motors
+# Converted to a function that takes in motions in [x dot, theta dot, duration]
+def drive(motions):
+    # iterate through and perform each open loop motion and then wait the specified duration.
+    for  count, motion in enumerate(motions):
+        print("Motion: ", count+1, "\t Chassis Forward Velocity (m/s): {:.2f} \t Chassis Angular Velocity (rad/s): {:.2f} \t Duration (sec): {:.2f}".format(motion[0], motion[1], motion[2]))
+        wheel_speeds = ik.getPdTargets(motion[:2])                  # take the forward speed(m/s) and turning speed(rad/s) and use inverse kinematics to deterimine wheel speeds
+        sc.driveOpenLoop(wheel_speeds)                              # take the calculated wheel speeds and use them to run the motors
 
-    log.tmpFile(motion[0], "x_dot")        # Exports x_dot to Node-RED
-    log.tmpFile(motion[1], "theta_dot")    # Exports theta_dot to Node-RED
+        log.tmpFile(motion[0], "x_dot")        # Exports x_dot to Node-RED
+        log.tmpFile(motion[1], "theta_dot")    # Exports theta_dot to Node-RED
 
-    current_voltage = bat.readVolts()
-    log.tmpFile(current_voltage, "voltage")
+        current_voltage = bat.readVolts()
+        log.tmpFile(current_voltage, "voltage")
 
-    sleep(motion[2])                                            # wait the motion duration
+        sleep(motion[2])                                            # wait the motion duration
+        sc.driveOpenLoop([0,0])
