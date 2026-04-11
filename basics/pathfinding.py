@@ -33,12 +33,9 @@ def go_to_position(x, y):
 
 
 
-
-
-
 if __name__ == "__main__":
     while (1):
         print('howdy')
-        x = int(input("x:"))
-        y = int(input("y:"))
+        x = float(input("x:"))
+        y = float(input("y:"))
         go_to_position(x, y)
