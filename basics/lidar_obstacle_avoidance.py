@@ -9,7 +9,7 @@ class ObstacleAvoidance:
 
         # Tunable parameters
         self.safe_distance = 0.8   # meters
-        self.front_angle = 60      # degrees (field of view)
+        self.front_angle = 120      # degrees (field of view)
 
     def start(self):
         self.lidar.connect()
@@ -65,7 +65,7 @@ class ObstacleAvoidance:
 
     def run(self):
         try:
-            while True:
+            #while True:        We dont' want it to loop when running inside other code
                 time.sleep(0.2)
 
                 data = self.lidar.get()
@@ -82,8 +82,10 @@ class ObstacleAvoidance:
                 if obstacle:
                     direction = self.decide_direction(front_data)
                     print(f"Obstacle at {dist:.2f} m. TURN {direction}")
+                    return direction
                 else:
                     print("Path is clear. MOVE FORWARD")
+                    return False
 
         except KeyboardInterrupt:
             print("Stopping...")
