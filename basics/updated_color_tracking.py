@@ -51,7 +51,7 @@ v3_max = 255     # Maximum V value
 
 target_width = 25      # Target pixel width of tracked object
 angle_margin = 0.2      # Radians object can be from image center to be considered "centered"
-width_margin = 5       # Minimum width error to drive forward/back
+width_margin = 10       # Minimum width error to drive forward/back
 
 def main():
     # Try opening camera with default method

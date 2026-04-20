@@ -8,8 +8,9 @@ class ObstacleAvoidance:
         self.lidar = Lidar()
 
         # Tunable parameters
-        self.safe_distance = 0.8   # meters
-        self.front_angle = 120      # degrees (field of view)
+        self.safe_distance = 0.6   # meters
+        self.greater_than = 0.1    # minimum distance to get a "real" reading in meters
+        self.front_angle = 90      # degrees (field of view)
 
     def start(self):
         self.lidar.connect()
@@ -34,7 +35,7 @@ class ObstacleAvoidance:
 
         min_distance = min(distances)
         
-        if min_distance < self.safe_distance:
+        if self.greater_than < min_distance < self.safe_distance:
             return True, min_distance
         else:
             return False, min_distance
